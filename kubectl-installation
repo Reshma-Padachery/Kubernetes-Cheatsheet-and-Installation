@@ -1,10 +1,15 @@
 Setup Kubernetes (K8s) Cluster on AWS
 Create Ubuntu EC2 instance
 
-install AWSCLI
-  
+Install AWSCLI
+ 
  curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip
+ 
+  apt-get update
+  
+  Install unzip and python packages
   apt install unzip python
+  
  unzip awscli-bundle.zip
  #sudo apt-get install unzip - if you dont have unzip in your system
  ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws
@@ -28,19 +33,19 @@ Create a Route53 private hosted zone (you can create Public hosted zone if you h
 
 create an S3 bucket
 
- aws s3 mb s3://dev.k8s.reshma.in
+ aws s3 mb s3://prod.k8s.reshma.in
 Expose environment variable:
 
- export KOPS_STATE_STORE=s3://dev.k8s.reshma.in
+ export KOPS_STATE_STORE=s3://qa.k8s.reshma.in
 Create sshkeys before creating cluster
 
  ssh-keygen
 Create kubernetes cluster definitions on S3 bucket
 
- kops create cluster --cloud=aws --zones=ap-south-1a --name=dev.k8s.reshma.in --dns-zone=reshma.com --dns private
+ kops create cluster --cloud=aws --zones=ap-south-1a --name=qa.k8s.reshma.in --dns-zone=reshma.in --dns private
 Create kubernetes cluser
 
-  kops update cluster dev.k8s.reshma.in --yes
+  kops update cluster qa.k8s.reshma.in --yes
 Validate your cluster
 
  kops validate cluster
@@ -59,4 +64,4 @@ Expose the deployment as service. This will create an ELB in front of those 2 co
  kubectl get services -o wide
 To delete cluster
 
- kops delete cluster dev.k8s.valaxy.in --yes
+ kops delete cluster qa.k8s.reshma.in --yes
